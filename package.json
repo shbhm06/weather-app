@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode=production",
-    "dev": "webpack serve --mode=development"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/shbhm06/weather-app/issues"
   },
-  "homepage": "https://shbhm06.github.io/weather-app/",
+  "homepage": "https://github.com/shbhm06/weather-app#readme",
   "devDependencies": {
     "css-loader": "^7.1.2",
     "html-loader": "^5.1.0",
