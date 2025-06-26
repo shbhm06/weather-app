@@ -114,11 +114,24 @@ searchBtn.addEventListener("click", () => {
         console.log('enter the name of the place!');
     }
 
+    const loading = document.getElementById('loading');
+    loading.classList.add('show');
+    searchBtn.disabled = true;
+    searchBtn.textContent = 'Loading...';
+
     getWeatherData(searchVal).then(data => {
         console.log('Proccessed data: ', data);
         displayData(data);
         overviewText(data);
         forecastText(data);
+        
+    }).catch(error => {
+        console.error('Error:', error);
+    }).finally(() => {
+
+        loading.classList.remove('show');
+        searchBtn.disabled = false;
+        searchBtn.textContent = 'Search';
     });
 });
 
