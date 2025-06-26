@@ -1,4 +1,17 @@
 import backgroundImage from './images/background.jpg';
+
+import clearDay from './images/icons/clear-day.png';
+import clearNight from './images/icons/clear-night.png';
+import rainy from './images/icons/rain.png';
+import snowy from './images/icons/snow.png';
+import sleet from './images/icons/sleet.png';
+import wind from './images/icons/wind.png';
+import fog from './images/icons/fog.png';
+import cloudy from './images/icons/cloudy.png';
+import cloudyDay from './images/icons/partly-cloudy-day.png';
+import cloudyNight from './images/icons/partly-cloudy-night.png';
+
+
 import './styles.css';
 document.documentElement.style.setProperty('--bg-image', `url(${backgroundImage})`);
 
@@ -39,7 +52,8 @@ function processWeatherData(rawData) {
         return {
             date: day.datetime,
             highTemp: Math.round(day.tempmax),
-            lowTemp: Math.round(day.tempmin)
+            lowTemp: Math.round(day.tempmin),
+            icon: day.icon
         };
     });
 
@@ -68,7 +82,26 @@ async function getWeatherData(place) {
     }
 }
 
+function getWeatherIcon(iconCode) {
 
+    const iconMap = {
+        'clear-day': clearDay,
+        'clear-night': clearNight,
+        'rain': rainy,
+        'snow': snowy,
+        'sleet': sleet,
+        'wind': wind,
+        'fog': fog,
+        'cloudy': cloudy,
+        'partly-cloudy-day': cloudyDay,
+        'partly-cloudy-night': cloudyNight,
+        // 'hail': './icons/hail.png',
+        // 'thunderstorm': './icons/thunderstorm.png',
+        // 'tornado': './icons/tornado.png'
+    };
+
+    return iconMap[iconCode] || './icons/clear-day.png';
+}
 
 const searchContent = document.getElementById("search-content");
 const searchBtn = document.getElementById("searchBtn");
@@ -93,6 +126,8 @@ const placeName = document.getElementById('place-name');
 const placeTemp = document.getElementById('place-temp');
 const placeRain = document.getElementById('place-rain');
 
+const todayIcon = document.getElementById('today-icon');
+
 const uvIndex = document.querySelector('#uv-index .bottom-data');
 const humidity = document.querySelector('#humidity .bottom-data');
 const visibility = document.querySelector('#visibility .bottom-data');
@@ -110,6 +145,11 @@ function displayData(data) {
 
     const rainText = data.chanceOfRain;
     placeRain.textContent = `Chance of Rain: ${rainText}%`;
+
+    const todayImage = data.sixDayForecast[0].icon;
+    todayIcon.src = getWeatherIcon(todayImage);
+    todayIcon.width = 105;
+    todayIcon.height = 100;
 
     const uvText = data.uvIndex;
     uvIndex.textContent = uvText;
@@ -178,11 +218,21 @@ function forecastText(data) {
         dayLabel.className = `day-${i}-forecast`;
         dayLabel.textContent = dayLabels[i - 1];
 
+        const imageContainer = document.createElement('div');
+        imageContainer.className = 'image-forcast';
+        const img = document.createElement('img');
+        img.src = getWeatherIcon(dayData.icon);
+        img.alt = dayData.icon;
+        img.width = 45;
+        img.height = 40;
+        imageContainer.appendChild(img);
+
         const tempDisplay = document.createElement('div');
         tempDisplay.className = 'temp-forcast';
         tempDisplay.textContent = `High/Low: ${dayData.highTemp}°/${dayData.lowTemp}°`;
 
         forecastCard.appendChild(dayLabel);
+        forecastCard.appendChild(imageContainer);
         forecastCard.appendChild(tempDisplay);
 
         weekCardContainer.appendChild(forecastCard);
